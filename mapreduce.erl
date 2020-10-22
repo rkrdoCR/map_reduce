@@ -56,7 +56,7 @@ map_reduce(M, R, M_func, R_func, AllChunks) ->
 							Reduce_processes))
 			      end),
     % lists:flatten(All_results).
-    file:write_file("results/reduceResult.dat", io_lib:format("~p.~n", [All_results]), [append]),
+    file:write_file("results/reduceResult.dat", io_lib:format("~p.~n", [lists:flatten(All_results)]), [append]),
     io:format("**Finished processing ~w chuncks with ~w mappers and ~w reducers.~n**Find the outputs in the results folder~n", [length(AllChunks), M, R]).
 
 reduce(List, P) ->
