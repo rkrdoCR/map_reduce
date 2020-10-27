@@ -27,7 +27,7 @@ spmv_multiply(Data) ->
     MV = [
         {Row, Value * lists:nth(Column, V)} || Z <- lists:flatten([Seg || Seg <- Segments]), {Value, {Row, Column}} <- ValRowCol, Z == Value
     ],
-    {R, MV}.
+    {R, summary([], MV)}.
 
 index_of(Item, List) -> index_of(Item, List, 1).
 
@@ -38,3 +38,16 @@ index_of(Item, [_|Tl], Index) -> index_of(Item, Tl, Index+1).
 first_nonzero([]) -> 0;
 first_nonzero([H|_]) when H > 0 -> H;
 first_nonzero([_|T]) -> first_nonzero(T).
+
+summary(List,[]) -> 
+    List;
+summary(List,[Head | Tail]) ->
+    {X, Y} = Head,
+    Result = lists:keyfind(X,1,List),
+    if 
+        Result /= false ->
+            {_,Z}=Result,
+            summary(lists:keystore(X,1 ,List, {X, Y + Z}) , Tail);
+        true ->
+            summary(lists:append(List,[{X,Y}]) , Tail)
+        end.
